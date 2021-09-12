@@ -8,4 +8,4 @@ class Result(models.Model):
     score=models.FloatField(verbose_name="نتیجه آزمون(درصد)")
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
