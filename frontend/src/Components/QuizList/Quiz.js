@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const Quiz = ({ quiz }) => {
   return (
     <div className="quiz my-3 flex flex-col transition-transform bg-purple-100 transform hover:-translate-y-2 space-y-2 items-start w-3/5 border border-gray-300 rounded-xl p-3">
@@ -17,9 +18,12 @@ const Quiz = ({ quiz }) => {
           </span>
         </p>
       </div>
-      <button className="py-2 px-4 mt-2 ring ring-purple-200 rounded-2xl">
+      <Link
+        to={`/quiz/${quiz.id}`}
+        className="py-2 px-4 mt-2 ring transition hover:text-white bg-purple-300 hover:bg-purple-500 ring-purple-200 rounded-2xl"
+      >
         شرکت در آزمون
-      </button>
+      </Link>
     </div>
   );
 };
