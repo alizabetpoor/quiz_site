@@ -7,6 +7,9 @@ export const getQuiz = (id = "") => {
 export const getResult = (id = "") => {
   return http.get(`/result/${id}`);
 };
+export const postResult = (data) => {
+  return http.post(`/result`, data);
+};
 
 export const getQuestions = (quizid) => {
   return http.get(`/questions/${quizid}`);
