@@ -38,6 +38,22 @@ const Questions = (props) => {
       clearInterval(interval);
     };
   }, [timer]);
+  const converSecondToMinute = (value) => {
+    const sec = parseInt(value, 10);
+    let hours = Math.floor(sec / 3600);
+    let minutes = Math.floor((sec - hours * 3600) / 60);
+    let seconds = sec - hours * 3600 - minutes * 60;
+    if (hours < 10) {
+      hours = "0" + hours;
+    }
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+    return hours + ":" + minutes + ":" + seconds;
+  };
   const calculateResult = () => {
     const result = (trueAnswers.length / questions.length) * 100;
     return result;
@@ -86,7 +102,7 @@ const Questions = (props) => {
         <div>
           <p>
             تایم باقیمانده از آزمون :{" "}
-            <span className="text-red-500">{timer}</span>
+            <span className="text-red-500">{converSecondToMinute(timer)}</span>
           </p>
         </div>
       ) : null}
