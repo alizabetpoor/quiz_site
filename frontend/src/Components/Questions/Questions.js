@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
-import { getQuestions, postResult } from "../../Services/ServiceMethods";
+import {
+  getQuestions,
+  postResult,
+  getQuiz,
+} from "../../Services/ServiceMethods";
 import Question from "./Question";
 const Questions = (props) => {
   const [questions, setQuestions] = useState([]);
   const [error, setError] = useState(false);
   const [trueAnswers, SetTrueAnswers] = useState([]);
-  const quizid = props.match.params.quizid;
+  const [timer, setTimer] = useState(null);
+  const quizid = Number(props.match.params.quizid);
   useEffect(() => {
     getQuestions(quizid)
       .then((res) => {
@@ -15,7 +20,24 @@ const Questions = (props) => {
         setError(true);
         console.log(err);
       });
+    getQuiz(quizid).then((res) => {
+      setTimer(res.data.time_quiz * 60);
+    });
   }, [quizid]);
+  useEffect(() => {
+    let interval = null;
+    interval = setInterval(() => {
+      if (timer === 0) {
+        clearInterval(interval);
+        submitQuiz();
+      } else {
+        setTimer((prev) => prev - 1);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timer]);
   const calculateResult = () => {
     const result = (trueAnswers.length / questions.length) * 100;
     return result;
@@ -40,6 +62,8 @@ const Questions = (props) => {
   const submitQuiz = () => {
     const result = { score: calculateResult(), contributor: 1, quiz: quizid };
     console.log(result);
+    props.history.push("/");
+
     // postResult()
   };
   const mapQeustions = () => {
@@ -58,6 +82,14 @@ const Questions = (props) => {
   };
   return (
     <div className="questions w-3/5 my-4 space-y-3 ">
+      {questions.length ? (
+        <div>
+          <p>
+            تایم باقیمانده از آزمون :{" "}
+            <span className="text-red-500">{timer}</span>
+          </p>
+        </div>
+      ) : null}
       {!error ? mapQeustions() : <p>مشکل در ارتباط با سرور</p>}
       {questions.length ? (
         <button
