@@ -1,8 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: "sahel";
+  src: local("sahel"), url("./assets/fonts/Sahel.ttf") format("truetype");
+}
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+html {
+  direction: rtl;
+  background-color: #f9f9f9;
+
+  font-family: "sahel";
+}
+button {
+  background-color: #a78bfa;
+  color: white;
+  transition: 0.3s;
+}
+button:hover {
+  background-color: #6366f1;
 }
