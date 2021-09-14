@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import QuizList from "../Components/QuizList/QuizList";
 import { getQuiz } from "../Services/ServiceMethods";
+import Layout from "../layout/Layout";
 const HomePage = () => {
   const [quizes, setQuizes] = useState([]);
   const [error, setError] = useState(false);
@@ -12,7 +13,7 @@ const HomePage = () => {
       .catch(() => setError(true));
   }, []);
   return (
-    <>
+    <Layout>
       {!error ? (
         <QuizList quizes={quizes} />
       ) : (
@@ -20,7 +21,7 @@ const HomePage = () => {
           مشکل در ارتباط با سرور
         </p>
       )}
-    </>
+    </Layout>
   );
 };
 
