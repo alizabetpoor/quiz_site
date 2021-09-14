@@ -33,7 +33,7 @@ const ResultPage = (props) => {
   return (
     <Layout>
       <div className="results w-3/5 mt-4 grid grid-cols-3 gap-2">
-        {results === [] ? (
+        {!results.length ? (
           <p>نتیجه ای برای نمایش وجود ندارد</p>
         ) : (
           results.map((result) => {
