@@ -15,10 +15,10 @@ const Result = (props) => {
         <div
           className={`result flex flex-col justify-around ${
             props.score >= quiz.required_score
-              ? "ring-green-600"
-              : "ring-red-600"
+              ? "border-green-600"
+              : "border-red-600"
           } 
-        items-stretch ring-2 rounded-lg p-2 h-32`}
+        items-stretch border-2 rounded-lg p-2 h-32 bg-purple-100`}
         >
           <div className="flex justify-between">
             <h3>{quiz.title}</h3>
