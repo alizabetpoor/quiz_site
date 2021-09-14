@@ -98,7 +98,11 @@ const Questions = (props) => {
       quiz: quizid,
     };
     postResult(result);
-    props.history.push("/result");
+    addToast("برای دیدن نتیجه آزمون به بخش نتایج آزمون بروید", {
+      appearance: "success",
+      autoDismiss: true,
+    });
+    props.history.push("/");
   };
   const mapQeustions = () => {
     let render = null;
