@@ -5,12 +5,14 @@ import {
   postResult,
   getQuiz,
 } from "../../Services/ServiceMethods";
+import { getUserMeApi } from "../../Services/UserServiceMethods";
 import Question from "./Question";
 const Questions = (props) => {
   const [questions, setQuestions] = useState([]);
   const [error, setError] = useState(false);
   const [trueAnswers, SetTrueAnswers] = useState([]);
   const [timer, setTimer] = useState(null);
+  const [user, setUser] = useState(null);
   const { addToast } = useToasts();
   const quizid = Number(props.match.params.quizid);
   useEffect(() => {
@@ -32,6 +34,9 @@ const Questions = (props) => {
         });
       getQuiz(quizid).then((res) => {
         setTimer(res.data.time_quiz * 60);
+      });
+      getUserMeApi(token).then((res) => {
+        setUser(res.data);
       });
     }
   }, [quizid]);
@@ -87,11 +92,13 @@ const Questions = (props) => {
     SetTrueAnswers(filterAnswer);
   };
   const submitQuiz = () => {
-    const result = { score: calculateResult(), contributor: 1, quiz: quizid };
-    console.log(result);
-    props.history.push("/");
-
-    // postResult()
+    const result = {
+      score: calculateResult(),
+      contributor: user.id,
+      quiz: quizid,
+    };
+    postResult(result);
+    props.history.push("/result");
   };
   const mapQeustions = () => {
     let render = null;
