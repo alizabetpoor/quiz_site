@@ -3,7 +3,7 @@ const Layout = (props) => {
   return (
     <>
       <Header />
-      {props.children}
+      <div className="main w-full flex justify-center">{props.children}</div>
     </>
   );
 };
