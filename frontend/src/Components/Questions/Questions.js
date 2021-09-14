@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useToasts } from "react-toast-notifications";
 import {
   getQuestions,
   postResult,
@@ -10,19 +11,29 @@ const Questions = (props) => {
   const [error, setError] = useState(false);
   const [trueAnswers, SetTrueAnswers] = useState([]);
   const [timer, setTimer] = useState(null);
+  const { addToast } = useToasts();
   const quizid = Number(props.match.params.quizid);
   useEffect(() => {
-    getQuestions(quizid)
-      .then((res) => {
-        setQuestions(res.data);
-      })
-      .catch((err) => {
-        setError(true);
-        console.log(err);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      addToast("برای شرکت در آزمون وارد شوید", {
+        appearance: "warning",
+        autoDismiss: true,
       });
-    getQuiz(quizid).then((res) => {
-      setTimer(res.data.time_quiz * 60);
-    });
+      props.history.push("/login");
+    } else {
+      getQuestions(quizid)
+        .then((res) => {
+          setQuestions(res.data);
+        })
+        .catch((err) => {
+          setError(true);
+          console.log(err);
+        });
+      getQuiz(quizid).then((res) => {
+        setTimer(res.data.time_quiz * 60);
+      });
+    }
   }, [quizid]);
   useEffect(() => {
     let interval = null;
