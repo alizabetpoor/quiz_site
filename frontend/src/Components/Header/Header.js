@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getUserMeApi } from "../../Services/UserServiceMethods";
-const Header = () => {
+import { getUserMeApi, logoutApi } from "../../Services/UserServiceMethods";
+import { withRouter } from "react-router";
+import { useToasts } from "react-toast-notifications";
+const Header = (props) => {
+  const { addToast } = useToasts();
   const [token, setToken] = useState("");
   const [user, setUser] = useState({});
   useEffect(() => {
@@ -12,10 +15,18 @@ const Header = () => {
   }, []);
   useEffect(() => {
     if (token !== "") {
-      const tok = `Token ${token}`;
-      getUserMeApi(tok).then((res) => setUser(res.data));
+      getUserMeApi(token).then((res) => setUser(res.data));
     }
   }, [token]);
+  const logoutHandle = () => {
+    logoutApi(token);
+    localStorage.removeItem("token");
+    addToast("شما با موفقیت خارج شدید", {
+      appearance: "success",
+      autoDismiss: true,
+    });
+    props.history.push("/login");
+  };
   return (
     <div
       style={{ backgroundColor: "#3B185F" }}
@@ -29,11 +40,25 @@ const Header = () => {
       <div>
         <p>به سایت آزمون خوش آمدید</p>
       </div>
-      <div>
+      <div className="flex">
         {token ? (
-          <p className="px-4 py-1 bg-green-400 font-normal rounded-lg text-lg text-black">
-            {user.username}
-          </p>
+          <>
+            <Link
+              to="/result"
+              className="px-4 py-1 mx-1 bg-blue-400 rounded-lg"
+            >
+              نتایج آزمون
+            </Link>
+            <p className="px-4 py-1 bg-green-400 font-normal rounded-lg text-lg text-black">
+              {user.username}
+            </p>
+            <button
+              className="px-4 py-1 mx-1 bg-red-600 rounded-lg"
+              onClick={logoutHandle}
+            >
+              خروج
+            </button>
+          </>
         ) : (
           <Link to="/login" className="px-4 py-1 bg-blue-400 rounded-lg">
             ورود
@@ -44,4 +69,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default withRouter(Header);
