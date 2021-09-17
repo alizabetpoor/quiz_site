@@ -2,23 +2,19 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getUserMeApi, logoutApi } from "../../Services/UserServiceMethods";
 import { withRouter } from "react-router";
+import AuthenticateUser from "../../Authentications/authenticateUserHook";
 import { useToasts } from "react-toast-notifications";
 const Header = (props) => {
   const { addToast } = useToasts();
-  const [token, setToken] = useState("");
-  const [user, setUser] = useState({});
+  const authenticate = AuthenticateUser();
+  const [user, setUser] = useState(null);
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setToken(token);
+    if (authenticate) {
+      setUser(authenticate);
     }
-  }, []);
-  useEffect(() => {
-    if (token !== "") {
-      getUserMeApi(token).then((res) => setUser(res.data));
-    }
-  }, [token]);
+  }, [authenticate]);
   const logoutHandle = () => {
+    const token = localStorage.getItem("token");
     logoutApi(token);
     localStorage.removeItem("token");
     addToast("شما با موفقیت خارج شدید", {
@@ -41,7 +37,7 @@ const Header = (props) => {
         <p>به سایت آزمون خوش آمدید</p>
       </div>
       <div className="flex">
-        {token ? (
+        {user ? (
           <>
             <Link
               to="/result"

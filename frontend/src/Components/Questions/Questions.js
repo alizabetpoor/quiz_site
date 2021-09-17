@@ -17,28 +17,20 @@ const Questions = (props) => {
   const quizid = Number(props.match.params.quizid);
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      addToast("برای شرکت در آزمون وارد شوید", {
-        appearance: "warning",
-        autoDismiss: true,
+    getQuestions(quizid)
+      .then((res) => {
+        setQuestions(res.data);
+      })
+      .catch((err) => {
+        setError(true);
+        console.log(err);
       });
-      props.history.push("/login");
-    } else {
-      getQuestions(quizid)
-        .then((res) => {
-          setQuestions(res.data);
-        })
-        .catch((err) => {
-          setError(true);
-          console.log(err);
-        });
-      getQuiz(quizid).then((res) => {
-        setTimer(res.data.time_quiz * 60);
-      });
-      getUserMeApi(token).then((res) => {
-        setUser(res.data);
-      });
-    }
+    getQuiz(quizid).then((res) => {
+      setTimer(res.data.time_quiz * 60);
+    });
+    getUserMeApi(token).then((res) => {
+      setUser(res.data);
+    });
   }, [quizid]);
   useEffect(() => {
     let interval = null;

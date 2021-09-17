@@ -2,17 +2,19 @@ import { useEffect, useState } from "react";
 import { useToasts } from "react-toast-notifications";
 import Layout from "../layout/Layout";
 import { loginApi } from "../Services/UserServiceMethods";
+import AuthenticateUser from "../Authentications/authenticateUserHook";
 const LoginPage = (props) => {
   const [authDetail, setAuthDetail] = useState({ username: "", password: "" });
   const [loginError, setLoginError] = useState(false);
   const { addToast } = useToasts();
+  const authenticate = AuthenticateUser();
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    if (authenticate) {
       addToast("شما لاگین کرده اید", { appearance: "info", autoDismiss: true });
       props.history.push("/");
     }
-  }, []);
+  }, [authenticate]);
   const loginHandler = (e) => {
     e.preventDefault();
     loginApi(authDetail)
